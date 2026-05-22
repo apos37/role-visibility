@@ -1,0 +1,43 @@
+#role-visibility .inside label[for="role_visibility_msg"] {
+    display: block;
+}
+
+.quick-edit-role_visibility.roles {
+    display: none;
+}
+
+.role-visibility-select-cont {
+    margin-bottom: 20px;
+}
+
+.role_visibility-selection, 
+.role_visibility-selection input, 
+.role_visibility-labels, 
+.role_visibility-selection label {
+    display: inline !important;
+}
+
+.role_visibility-selection input {
+    -webkit-appearance: auto !important;
+    appearance: auto !important;
+}
+
+.role_visibility-selection {
+    margin-right: 20px;
+}
+
+.role_visibility-selection {
+    display: none;
+}
+
+#role_visibility_msg {
+    width: 100%;
+}
+
+fieldset.inline-edit-col-left.col-role_visibility {
+    margin-top: 10px !important;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    padding: 7px !important;
+    background: #eee;
+}

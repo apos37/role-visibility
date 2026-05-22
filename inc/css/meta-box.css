@@ -1,0 +1,20 @@
+#role-visibility .inside label[for="role_visibility_msg"] {
+    display: block;
+}
+
+.role-visibility-select-cont {
+    margin-bottom: 20px;
+}
+
+.role_visibility-selection, .role-visibility-select-label {
+    display: inline;
+    margin-right: 20px;
+}
+
+.role_visibility-selection {
+    display: none;
+}
+
+#role_visibility_msg {
+    width: 100%;
+}

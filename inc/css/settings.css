@@ -1,0 +1,68 @@
+div#fields_container_role-visibility-sections {
+    width: fit-content;
+}
+
+.text-plus-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.text-plus-row .order {
+    font-size: 20px;
+    padding: 0 10px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.placeholder {
+    border: 2px dashed #ccc;
+    background-color: #f9f9f9;
+    height: 50px;
+    margin: 10px 0;
+}
+
+.duplicate {
+    border: 2px solid yellow  !important;
+    color: white !important;
+    background-color: red !important;
+}
+
+.warning-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+    display: none;
+    line-height: 12px;
+}
+
+input::placeholder {
+    color: #aaa;
+    opacity: 1;
+}
+
+em code {
+    font-style: normal !important;
+}
+
+.license-status {
+    padding: 10px;
+    border-radius: 5px;
+    background: #dc3232;
+    color: white;
+    margin-top: 7px;
+    display: block;
+    width: fit-content;
+    font-weight: bold;
+}
+
+.license-status.active {
+    background: #46b450 !important;
+    font-weight: normal !important;
+}
+
+.license-status a {
+    color: white;
+}
