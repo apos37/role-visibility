@@ -108,7 +108,8 @@ class License {
     /**
      * Check the license
      *
-     * @return void
+     * @param boolean $return_result
+     * @return array|void
      */
     public function check_license( $return_result = false ) {
         // error_log( 'License check triggered at ' . date( 'Y-m-d H:i:s' ) );
