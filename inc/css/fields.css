@@ -1,0 +1,242 @@
+/**
+ * ROLE VISIBILITY: Editor fields
+ *
+ * Access controls in the post meta box, Quick/Bulk Edit and menu items, the search pickers,
+ * and the template settings and merge tags boxes.
+ */
+
+.rolevisibility-access-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rolevisibility-access-label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.rolevisibility-access-fields,
+.rolevisibility-access-label {
+    min-width: 0;
+}
+
+.rolevisibility-access-label select,
+.rolevisibility-picker-search {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.rolevisibility-restrict-to {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.rolevisibility-restrict-to[hidden],
+.rolevisibility-scope-panel[hidden] {
+    display: none;
+}
+
+.rolevisibility-sub-label {
+    display: block;
+    font-weight: 600;
+    margin: 6px 0 2px;
+}
+
+.rolevisibility-role-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+}
+
+.rolevisibility-role-checkboxes label,
+.rolevisibility-check-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.rolevisibility-check-row {
+    display: flex;
+    margin: 2px 0;
+}
+
+.rolevisibility-hint {
+    margin: 4px 0 0;
+    color: #646970;
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* Picker */
+
+.rolevisibility-picker {
+    position: relative;
+}
+
+.rolevisibility-picker-selected {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0 0 6px;
+    padding: 0;
+    list-style: none;
+}
+
+.rolevisibility-picker-selected:empty {
+    display: none;
+}
+
+.rolevisibility-picker-selected li {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 2px 4px 2px 8px;
+    background: #f0f6fc;
+    border: 1px solid #c5d9ed;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.rolevisibility-picker-remove {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    color: #646970;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0 2px;
+}
+
+.rolevisibility-picker-remove:hover,
+.rolevisibility-picker-remove:focus {
+    color: #d63638;
+}
+
+.rolevisibility-picker-results {
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+    right: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba( 0, 0, 0, .12 );
+}
+
+.rolevisibility-picker-results li {
+    margin: 0;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.rolevisibility-picker-results li.is-active,
+.rolevisibility-picker-results li:hover {
+    background: #f0f6fc;
+}
+
+.rolevisibility-picker-results li.is-empty {
+    cursor: default;
+    color: #646970;
+    font-style: italic;
+}
+
+/* Meta box */
+
+.rolevisibility-templates-in-use {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f1;
+}
+
+.rolevisibility-templates-in-use ul {
+    margin: 0 0 8px;
+}
+
+.rolevisibility-templates-in-use li {
+    margin: 0 0 4px;
+}
+
+/* List table */
+
+.fixed .column-rolevisibility {
+    width: 14%;
+}
+
+.rolevisibility-inline-edit .rolevisibility-access-fields {
+    margin-top: 6px;
+    padding: 8px;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    background: #f6f7f7;
+}
+
+.rolevisibility-inline-edit .rolevisibility-role-checkboxes input,
+.rolevisibility-inline-edit .rolevisibility-check-row input {
+    width: auto;
+}
+
+/* Menus */
+
+.rolevisibility-menu-fields {
+    margin: 6px 0 10px;
+}
+
+/* Template editor */
+
+.rolevisibility-template-settings select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+}
+
+.rolevisibility-scope-panel {
+    margin: 4px 0 6px;
+}
+
+.rolevisibility-merge-tags {
+    margin: 8px 0 0;
+}
+
+.rolevisibility-merge-tags li {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 8px;
+}
+
+.rolevisibility-merge-tags span {
+    color: #646970;
+    font-size: 12px;
+}
+
+.rolevisibility-merge-tag {
+    align-self: flex-start;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.rolevisibility-merge-tag:hover code,
+.rolevisibility-merge-tag:focus code {
+    background: #dcecf8;
+}
+
+.rolevisibility-merge-tag.is-copied code {
+    background: #d1f2d9;
+}
+
+.rolevisibility-merge-tag-select {
+    margin-left: 4px;
+    vertical-align: middle;
+}
