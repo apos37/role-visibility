@@ -116,7 +116,10 @@ class Shortcode {
 
         $rule = Access::get_rule( $post_id );
 
-        return '<div class="access-denied-content rolevisibility-message" data-condition="' . esc_attr( $reason ) . '" data-roles="' . esc_attr( implode( ' ', $rule[ 'roles' ] ) ) . '">' . Templates::render( $post_id, $reason, $redirect_to ) . '</div>';
+        $allowed_html = (array) apply_filters( 'rolevisibility_template_allowed_html', wp_kses_allowed_html( 'post' ) );
+        $content = wp_kses( Templates::render( $post_id, $reason, $redirect_to ), $allowed_html );
+
+        return '<div class="access-denied-content rolevisibility-message" data-condition="' . esc_attr( $reason ) . '" data-roles="' . esc_attr( implode( ' ', $rule[ 'roles' ] ) ) . '">' . $content . '</div>';
     } // End build()
 
 } // End class Shortcode

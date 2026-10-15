@@ -83,6 +83,8 @@ Nothing is removed unless you check "Remove All Plugin Data on Uninstall" under 
 = 2.0.0.1 =
 * Update: The version 1.x upgrade now also converts access rules and custom messages saved with the _role_visibility and _role_visibility_msg meta keys
 * Update: Import from Nav Menu Roles only appears while Nav Menu Roles is active, and deactivates it after the import
+* Fix: Shortcode output is now escaped with wp_kses().
+* New: rolevisibility_template_allowed_html filter to change the HTML tags and attributes allowed in access denied templates.
 
 = 2.0.0 =
 * Now free on WordPress.org, renamed "Role Visibility — Hide Pages & Posts Based on Roles"
@@ -127,8 +129,3 @@ Nothing is removed unless you check "Remove All Plugin Data on Uninstall" under 
 
 = 1.0.1 =
 * Initial release.
-
-== Upgrade Notice ==
-
-= 2.0.0 =
-Major update. Settings, access rules and custom messages are migrated automatically, and messages become editable templates. Review Role Visibility > Templates after updating.
