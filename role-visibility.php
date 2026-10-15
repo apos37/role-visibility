@@ -3,7 +3,7 @@
  * Plugin Name:         Role Visibility — Hide Pages & Posts Based on Roles
  * Plugin URI:          https://pluginrx.com/plugin/role-visibility/
  * Description:         Control who can view your posts and pages by role, user or login status, with customizable access denied templates.
- * Version:             2.0.0
+ * Version:             2.0.0.1
  * Requires at least:   6.0
  * Requires PHP:        8.0
  * Author:              PluginRx

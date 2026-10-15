@@ -33,8 +33,8 @@ class Migrate {
      * Version 1.x names.
      */
     public const LEGACY_PREFIX = 'role_visibility_';
-    public const LEGACY_META = 'role_visibility';
-    public const LEGACY_MSG_META = 'role_visibility_msg';
+    public const LEGACY_META_KEYS = [ 'role_visibility', '_role_visibility' ];
+    public const LEGACY_MSG_META_KEYS = [ 'role_visibility_msg', '_role_visibility_msg' ];
     public const LEGACY_PLACEHOLDER = '{role_visibility_msg}';
 
 
@@ -95,6 +95,19 @@ class Migrate {
 
 
     /**
+     * Build a prepared "meta_key IN ( ... )" list for the version 1.x meta keys.
+     *
+     * @param array $keys
+     * @return string
+     */
+    private static function legacy_meta_in( array $keys ) : string {
+        global $wpdb;
+
+        return $wpdb->prepare( implode( ',', array_fill( 0, count( $keys ), '%s' ) ), $keys ); // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- the placeholders are generated from the number of keys.
+    } // End legacy_meta_in()
+
+
+    /**
      * Check whether version 1.x options or post meta still exist.
      *
      * @return bool
@@ -103,7 +116,7 @@ class Migrate {
         global $wpdb;
 
         $option = $wpdb->get_var( $wpdb->prepare( "SELECT 1 FROM {$wpdb->options} WHERE option_name LIKE %s LIMIT 1", $wpdb->esc_like( self::LEGACY_PREFIX ) . '%' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- checks for leftover version 1.x data.
-        $meta = $wpdb->get_var( $wpdb->prepare( "SELECT 1 FROM {$wpdb->postmeta} WHERE meta_key IN ( %s, %s ) LIMIT 1", self::LEGACY_META, self::LEGACY_MSG_META ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- checks for leftover version 1.x data.
+        $meta = $wpdb->get_var( "SELECT 1 FROM {$wpdb->postmeta} WHERE meta_key IN ( " . self::legacy_meta_in( array_merge( self::LEGACY_META_KEYS, self::LEGACY_MSG_META_KEYS ) ) . " ) LIMIT 1" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- checks for leftover version 1.x data.
 
         return (bool) ( $option || $meta );
     } // End has_legacy_data()
@@ -165,7 +178,7 @@ class Migrate {
             $legacy[ substr( $row->option_name, strlen( self::LEGACY_PREFIX ) ) ] = maybe_unserialize( $row->option_value );
         }
 
-        $has_meta = (bool) $wpdb->get_var( $wpdb->prepare( "SELECT 1 FROM {$wpdb->postmeta} WHERE meta_key IN ( %s, %s ) LIMIT 1", self::LEGACY_META, self::LEGACY_MSG_META ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration check.
+        $has_meta = (bool) $wpdb->get_var( "SELECT 1 FROM {$wpdb->postmeta} WHERE meta_key IN ( " . self::legacy_meta_in( array_merge( self::LEGACY_META_KEYS, self::LEGACY_MSG_META_KEYS ) ) . " ) LIMIT 1" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration check.
 
         if ( empty( $legacy ) && ! $has_meta ) {
             Templates::create_defaults();
@@ -289,11 +302,17 @@ class Migrate {
     private static function migrate_access_meta() : int {
         global $wpdb;
 
-        $rows = $wpdb->get_results( $wpdb->prepare( "SELECT meta_id, post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s", self::LEGACY_META ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration of version 1.x post meta.
+        $rows = $wpdb->get_results( "SELECT meta_id, post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key IN ( " . self::legacy_meta_in( self::LEGACY_META_KEYS ) . " ) ORDER BY meta_key ASC, meta_id ASC" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration of version 1.x post meta.
         $groups = [];
 
+        $seen = [];
+
         foreach ( $rows as $row ) {
-            $groups[ self::normalize_legacy_rule( (string) $row->meta_value ) ][] = (int) $row->meta_id;
+            $post_id = (int) $row->post_id;
+            $value = isset( $seen[ $post_id ] ) ? 'default' : self::normalize_legacy_rule( (string) $row->meta_value );
+
+            $seen[ $post_id ] = true;
+            $groups[ $value ][] = (int) $row->meta_id;
         }
 
         $kept = 0;
@@ -395,7 +414,7 @@ class Migrate {
             }
         }
 
-        $rows = $wpdb->get_results( $wpdb->prepare( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value <> ''", self::LEGACY_MSG_META ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration of version 1.x post meta.
+        $rows = $wpdb->get_results( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key IN ( " . self::legacy_meta_in( self::LEGACY_MSG_META_KEYS ) . " ) AND meta_value <> '' ORDER BY meta_key ASC" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration of version 1.x post meta.
 
         foreach ( $rows as $row ) {
             $post_id = (int) $row->post_id;
@@ -430,7 +449,9 @@ class Migrate {
             }
         }
 
-        delete_post_meta_by_key( self::LEGACY_MSG_META );
+        foreach ( self::LEGACY_MSG_META_KEYS as $meta_key ) {
+            delete_post_meta_by_key( $meta_key );
+        }
 
         return $created;
     } // End migrate_messages()

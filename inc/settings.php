@@ -312,7 +312,7 @@ class Settings {
             'pageCreated'   => __( 'No Access Page created and saved.', 'role-visibility' ),
             'confirmReset'  => __( 'Reset all Role Visibility settings to their defaults? Your templates and the access rules on your posts are not affected.', 'role-visibility' ),
             'confirmImport' => __( 'Importing will overwrite your current Role Visibility settings. Continue?', 'role-visibility' ),
-            'confirmMenus'  => __( 'Import the visibility rules from Nav Menu Roles into Role Visibility? Existing Role Visibility menu rules on the same items will be overwritten.', 'role-visibility' ),
+            'confirmMenus'  => __( 'Import the visibility rules from Nav Menu Roles into Role Visibility? Existing Role Visibility menu rules on the same items will be overwritten and Nav Menu Roles will be deactivated.', 'role-visibility' ),
             'exportName'    => 'role-visibility-settings-' . gmdate( 'Y-m-d' ) . '.json',
         ] );
     } // End enqueue()
@@ -510,11 +510,11 @@ class Settings {
                             </div>
                         </div>
 
-                        <?php if ( NavMenus::has_nav_menu_roles_data() ) : ?>
+                        <?php if ( '' !== NavMenus::active_nav_menu_roles_plugin() ) : ?>
                             <div class="rolevisibility-field">
                                 <label>
                                     <?php esc_html_e( 'Import from Nav Menu Roles', 'role-visibility' ); ?>
-                                    <?php Helpers::tooltip( __( 'Copies the menu item rules saved by the Nav Menu Roles plugin and turns on the Navigation Menus option, so you can deactivate Nav Menu Roles afterward. Its own data is left untouched.', 'role-visibility' ) ); ?>
+                                    <?php Helpers::tooltip( __( 'Copies the menu item rules saved by the Nav Menu Roles plugin turns on the Navigation Menus option, and deactivates Nav Menu Roles. Its own data is left untouched.', 'role-visibility' ) ); ?>
                                 </label>
                                 <div><button type="button" class="rolevisibility-button" id="rolevisibility-import-menus"><?php esc_html_e( 'Import Menu Rules', 'role-visibility' ); ?></button></div>
                             </div>

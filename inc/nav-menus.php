@@ -315,6 +315,33 @@ class NavMenus {
 
 
     /**
+     * Get the plugin file of Nav Menu Roles when it is active.
+     *
+     * @return string Plugin file relative to the plugins folder, or an empty string.
+     */
+    public static function active_nav_menu_roles_plugin() : string {
+        $active = (array) get_option( 'active_plugins', [] );
+
+        if ( is_multisite() ) {
+            $active = array_merge( $active, array_keys( (array) get_site_option( 'active_sitewide_plugins', [] ) ) );
+        }
+
+        $found = '';
+
+        foreach ( $active as $plugin ) {
+            $plugin = (string) $plugin;
+
+            if ( 'nav-menu-roles.php' === basename( $plugin ) || str_starts_with( $plugin, 'nav-menu-roles/' ) ) {
+                $found = $plugin;
+                break;
+            }
+        }
+
+        return (string) apply_filters( 'rolevisibility_nav_menu_roles_plugin', $found );
+    } // End active_nav_menu_roles_plugin()
+
+
+    /**
      * AJAX: import Nav Menu Roles rules and turn on the Navigation Menus option.
      *
      * @return void
@@ -351,11 +378,28 @@ class NavMenus {
             Settings::update( 'hide', $hide );
         }
 
-        wp_send_json_success( sprintf(
+        $plugin = self::active_nav_menu_roles_plugin();
+        $deactivated = false;
+
+        if ( '' !== $plugin && current_user_can( 'deactivate_plugin', $plugin ) ) {
+            if ( ! function_exists( 'deactivate_plugins' ) ) {
+                require_once ABSPATH . 'wp-admin/includes/plugin.php';
+            }
+
+            deactivate_plugins( $plugin );
+            $deactivated = ! is_plugin_active( $plugin );
+        }
+
+        $message = sprintf(
             /* translators: %d: Number of imported menu items. */
-            _n( '%d menu item rule imported. Navigation Menus is now on. Reloading…', '%d menu item rules imported. Navigation Menus is now on. Reloading…', $count, 'role-visibility' ),
+            _n( '%d menu item rule imported.', '%d menu item rules imported.', $count, 'role-visibility' ),
             $count
-        ) );
+        );
+
+        $message .= ' ' . __( 'Navigation Menus is now on.', 'role-visibility' );
+        $message .= $deactivated ? ' ' . __( 'Nav Menu Roles was deactivated.', 'role-visibility' ) : '';
+
+        wp_send_json_success( $message . ' ' . __( 'Reloading…', 'role-visibility' ) );
     } // End ajax_import()
 
 } // End class NavMenus

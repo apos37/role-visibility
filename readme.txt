@@ -4,7 +4,7 @@ Tags: restrict content, access control, user roles, members only, hide pages
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 2.0.0
+Stable tag: 2.0.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,9 @@ Nothing is removed unless you check "Remove All Plugin Data on Uninstall" under 
 6. Menu item visibility
 
 == Changelog ==
+= 2.0.0.1 =
+* Update: The version 1.x upgrade now also converts access rules and custom messages saved with the _role_visibility and _role_visibility_msg meta keys
+* Update: Import from Nav Menu Roles only appears while Nav Menu Roles is active, and deactivates it after the import
 
 = 2.0.0 =
 * Now free on WordPress.org, renamed "Role Visibility — Hide Pages & Posts Based on Roles"
